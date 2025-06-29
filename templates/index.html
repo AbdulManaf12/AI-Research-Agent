@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🔬 AI Research Agent - Professional Research Reports</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        color: #333;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 3rem;
+        color: white;
+      }
+
+      .header h1 {
+        font-size: 3.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .header p {
+        font-size: 1.2rem;
+        opacity: 0.9;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .main-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 3rem;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .input-section {
+        margin-bottom: 2rem;
+      }
+
+      .input-group {
+        position: relative;
+        margin-bottom: 2rem;
+      }
+
+      .input-group label {
+        display: block;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+      }
+
+      .input-group input,
+      .input-group textarea {
+        width: 100%;
+        padding: 1.2rem 1.5rem;
+        border: 2px solid #e5e7eb;
+        border-radius: 12px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: #f9fafb;
+      }
+
+      .input-group input:focus,
+      .input-group textarea:focus {
+        outline: none;
+        border-color: #667eea;
+        background: white;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+
+      .topic-input {
+        font-size: 1.1rem;
+        height: 120px;
+        resize: vertical;
+      }
+
+      .generate-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 1.2rem 3rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: 100%;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .generate-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+      }
+
+      .generate-btn:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .progress-section {
+        display: none;
+        margin-top: 2rem;
+        padding: 2rem;
+        background: #f8fafc;
+        border-radius: 12px;
+        border-left: 4px solid #667eea;
+      }
+
+      .progress-bar {
+        width: 100%;
+        height: 8px;
+        background: #e5e7eb;
+        border-radius: 4px;
+        overflow: hidden;
+        margin: 1rem 0;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        border-radius: 4px;
+        transition: width 0.3s ease;
+        width: 0%;
+      }
+
+      .progress-text {
+        font-weight: 500;
+        color: #374151;
+        margin-bottom: 0.5rem;
+      }
+
+      .result-section {
+        display: none;
+        margin-top: 2rem;
+      }
+
+      .result-card {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e5e7eb;
+      }
+
+      .result-header {
+        display: flex;
+        justify-content: between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+
+      .result-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #111827;
+        flex: 1;
+      }
+
+      .action-buttons {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+      }
+
+      .btn-primary {
+        background: #667eea;
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background: #5a67d8;
+        transform: translateY(-1px);
+      }
+
+      .btn-secondary {
+        background: #f3f4f6;
+        color: #374151;
+        border: 1px solid #d1d5db;
+      }
+
+      .btn-secondary:hover {
+        background: #e5e7eb;
+      }
+
+      .features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin-top: 3rem;
+      }
+
+      .feature {
+        text-align: center;
+        color: white;
+      }
+
+      .feature-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        opacity: 0.9;
+      }
+
+      .feature h3 {
+        font-size: 1.3rem;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+      }
+
+      .feature p {
+        opacity: 0.8;
+        line-height: 1.6;
+      }
+
+      .spinner {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: #fff;
+        animation: spin 1s ease-in-out infinite;
+        margin-right: 0.5rem;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .notification {
+        position: fixed;
+        top: 2rem;
+        right: 2rem;
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        color: white;
+        font-weight: 500;
+        z-index: 1000;
+        transform: translateX(400px);
+        transition: transform 0.3s ease;
+      }
+
+      .notification.show {
+        transform: translateX(0);
+      }
+
+      .notification.success {
+        background: #10b981;
+      }
+
+      .notification.error {
+        background: #ef4444;
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          padding: 1rem;
+        }
+
+        .header h1 {
+          font-size: 2.5rem;
+        }
+
+        .main-card {
+          padding: 2rem 1.5rem;
+        }
+
+        .result-header {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .action-buttons {
+          justify-content: stretch;
+        }
+
+        .btn {
+          flex: 1;
+          justify-content: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>🔬 AI Research Agent</h1>
+        <p>
+          Generate comprehensive, professional research reports on any topic
+          using advanced AI and real-time web search
+        </p>
+      </div>
+
+      <div class="main-card">
+        <form id="researchForm">
+          <div class="input-section">
+            <div class="input-group">
+              <label for="topic">
+                <i class="fas fa-search"></i> Research Topic
+              </label>
+              <textarea
+                id="topic"
+                name="topic"
+                class="topic-input"
+                placeholder="Enter your research topic (e.g., 'Climate Change Impact on Agriculture', 'Artificial Intelligence in Healthcare', 'Renewable Energy Technologies 2025')"
+                required
+              ></textarea>
+            </div>
+
+            <button type="submit" class="generate-btn" id="generateBtn">
+              <i class="fas fa-rocket"></i>
+              Generate Research Report
+            </button>
+          </div>
+        </form>
+
+        <div class="progress-section" id="progressSection">
+          <div class="progress-text" id="progressText">
+            Initializing research...
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+        </div>
+
+        <div class="result-section" id="resultSection">
+          <div class="result-card">
+            <div class="result-header">
+              <div class="result-title" id="resultTitle">
+                Research Report Generated
+              </div>
+              <div class="action-buttons">
+                <a href="#" class="btn btn-primary" id="viewBtn">
+                  <i class="fas fa-eye"></i> View Report
+                </a>
+                <a href="#" class="btn btn-secondary" id="downloadBtn">
+                  <i class="fas fa-download"></i> Download MD
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="features">
+        <div class="feature">
+          <div class="feature-icon">
+            <i class="fas fa-brain"></i>
+          </div>
+          <h3>AI-Powered Research</h3>
+          <p>
+            Uses GPT-4 for intelligent analysis and synthesis of information
+            from multiple sources
+          </p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">
+            <i class="fas fa-search-plus"></i>
+          </div>
+          <h3>Multi-Search Strategy</h3>
+          <p>
+            Conducts 3 different targeted searches to ensure comprehensive
+            coverage of your topic
+          </p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">
+            <i class="fas fa-newspaper"></i>
+          </div>
+          <h3>Professional Reports</h3>
+          <p>
+            Generates publication-quality reports with proper structure,
+            citations, and references
+          </p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">
+            <i class="fas fa-clock"></i>
+          </div>
+          <h3>Real-time Data</h3>
+          <p>
+            Searches for the latest information and current developments in your
+            research area
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="notification" id="notification"></div>
+
+    <script>
+      let currentSessionId = null;
+      let progressInterval = null;
+
+      document
+        .getElementById("researchForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          const topic = document.getElementById("topic").value.trim();
+          if (!topic) {
+            showNotification("Please enter a research topic", "error");
+            return;
+          }
+
+          // Update UI
+          const generateBtn = document.getElementById("generateBtn");
+          generateBtn.disabled = true;
+          generateBtn.innerHTML =
+            '<div class="spinner"></div> Generating Report...';
+
+          document.getElementById("progressSection").style.display = "block";
+          document.getElementById("resultSection").style.display = "none";
+
+          try {
+            const response = await fetch("/generate", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ topic: topic }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+              currentSessionId = data.session_id;
+              startProgressTracking();
+            } else {
+              throw new Error(data.error || "Failed to start research");
+            }
+          } catch (error) {
+            showNotification(error.message, "error");
+            resetUI();
+          }
+        });
+
+      function startProgressTracking() {
+        let progress = 0;
+
+        progressInterval = setInterval(async () => {
+          try {
+            const response = await fetch(`/progress/${currentSessionId}`);
+            const data = await response.json();
+
+            if (response.ok) {
+              document.getElementById("progressText").textContent =
+                data.message;
+
+              // Update progress based on status
+              switch (data.status) {
+                case "initializing":
+                  progress = 10;
+                  break;
+                case "searching":
+                  progress = 40;
+                  break;
+                case "generating":
+                  progress = 80;
+                  break;
+                case "completed":
+                  progress = 100;
+                  clearInterval(progressInterval);
+                  showResults();
+                  break;
+                case "error":
+                  clearInterval(progressInterval);
+                  showNotification(data.message, "error");
+                  resetUI();
+                  break;
+              }
+
+              document.getElementById("progressFill").style.width =
+                progress + "%";
+            }
+          } catch (error) {
+            clearInterval(progressInterval);
+            showNotification("Error tracking progress", "error");
+            resetUI();
+          }
+        }, 2000);
+      }
+
+      async function showResults() {
+        try {
+          const response = await fetch(`/result/${currentSessionId}`);
+          const data = await response.json();
+
+          if (response.ok) {
+            document.getElementById(
+              "resultTitle"
+            ).textContent = `Report: ${data.topic}`;
+            document.getElementById(
+              "viewBtn"
+            ).href = `/report/${currentSessionId}`;
+            document.getElementById(
+              "downloadBtn"
+            ).href = `/download/${currentSessionId}`;
+
+            document.getElementById("resultSection").style.display = "block";
+            showNotification(
+              "Research report generated successfully!",
+              "success"
+            );
+            resetUI();
+          } else {
+            throw new Error("Failed to load results");
+          }
+        } catch (error) {
+          showNotification("Error loading results", "error");
+          resetUI();
+        }
+      }
+
+      function resetUI() {
+        const generateBtn = document.getElementById("generateBtn");
+        generateBtn.disabled = false;
+        generateBtn.innerHTML =
+          '<i class="fas fa-rocket"></i> Generate Research Report';
+
+        if (progressInterval) {
+          clearInterval(progressInterval);
+          progressInterval = null;
+        }
+
+        setTimeout(() => {
+          document.getElementById("progressSection").style.display = "none";
+        }, 1000);
+      }
+
+      function showNotification(message, type) {
+        const notification = document.getElementById("notification");
+        notification.textContent = message;
+        notification.className = `notification ${type}`;
+        notification.classList.add("show");
+
+        setTimeout(() => {
+          notification.classList.remove("show");
+        }, 4000);
+      }
+
+      // Auto-resize textarea
+      document.getElementById("topic").addEventListener("input", function () {
+        this.style.height = "auto";
+        this.style.height = Math.min(this.scrollHeight, 200) + "px";
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,11 @@
+flask==3.0.0
+phi-ai==2.4.0
+openai==1.35.0
+python-dotenv==1.0.0
+exa-py==1.0.5
+markdown==3.5.1
+Werkzeug==3.0.1
+Jinja2==3.1.2
+itsdangerous==2.1.2
+click==8.1.7
+MarkupSafe==2.1.3
